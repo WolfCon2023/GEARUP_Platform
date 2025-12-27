@@ -1,0 +1,22 @@
+{
+  "name": "north-star-student-success-os",
+  "version": "1.0.0",
+  "private": true,
+  "description": "North Star Student Success OS - Role-based student success platform",
+  "scripts": {
+    "dev": "pnpm --parallel --filter './apps/*' dev",
+    "build": "pnpm --recursive build",
+    "lint": "pnpm --recursive lint",
+    "test": "pnpm --recursive test",
+    "seed": "pnpm --filter api seed"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
+

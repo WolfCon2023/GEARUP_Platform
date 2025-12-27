@@ -1,0 +1,531 @@
+{
+  "sc_gearup_firestore_schema": {
+    "description": "Complete Firestore database schema for SC GEAR UP Digital Curriculum Platform",
+    "version": "1.0",
+    "last_updated": "2024-12-19",
+    
+    "collections": {
+      
+      "modules": {
+        "description": "Curriculum module content library (read-only for students/teachers)",
+        "document_id": "module_id (string, e.g., 'mod_algebra1_foundations')",
+        "indexes": ["grade", "subject", "pillar", "published"],
+        "fields": {
+          "module_id": {
+            "type": "string",
+            "required": true,
+            "example": "mod_algebra1_foundations"
+          },
+          "title": {
+            "type": "string",
+            "required": true,
+            "example": "Algebra I Foundations"
+          },
+          "grade": {
+            "type": "number",
+            "required": true,
+            "range": [7, 12],
+            "example": 9
+          },
+          "subject": {
+            "type": "string",
+            "required": true,
+            "enum": ["Math", "ELA", "Science", "College & Career"],
+            "example": "Math"
+          },
+          "pillar": {
+            "type": "string",
+            "required": true,
+            "enum": ["Academic Preparation", "College Aspiration", "College Entry"],
+            "example": "Academic Preparation"
+          },
+          "word_count": {
+            "type": "number",
+            "description": "Total words in student edition",
+            "example": 2800
+          },
+          "estimated_time_minutes": {
+            "type": "number",
+            "description": "Expected completion time",
+            "example": 60
+          },
+          
+          "student_content": {
+            "type": "object",
+            "fields": {
+              "introduction": {
+                "type": "string",
+                "format": "HTML",
+                "description": "Hook and module overview"
+              },
+              "chapters": {
+                "type": "array",
+                "items": {
+                  "chapter_number": "number",
+                  "title": "string",
+                  "content": "string (HTML)",
+                  "word_count": "number",
+                  "activities": {
+                    "type": "array",
+                    "items": {
+                      "activity_id": "string",
+                      "type": "enum (text_response, multiple_choice, calculation, reflection)",
+                      "prompt": "string",
+                      "rubric": "string (optional)"
+                    }
+                  }
+                }
+              },
+              "summary": {
+                "type": "string",
+                "format": "HTML",
+                "description": "Key takeaways"
+              },
+              "readiness_accelerator": {
+                "type": "string",
+                "format": "HTML",
+                "description": "Scaffolded version for struggling readers"
+              }
+            }
+          },
+          
+          "teacher_guide": {
+            "type": "object",
+            "fields": {
+              "objectives": {
+                "type": "array<string>",
+                "example": ["Students will solve linear equations with variables on both sides"]
+              },
+              "materials": {
+                "type": "array<string>",
+                "example": ["Calculator", "Graph paper"]
+              },
+              "time_breakdown": {
+                "type": "object",
+                "fields": {
+                  "hook": "number (minutes)",
+                  "instruction": "number",
+                  "guided_practice": "number",
+                  "independent": "number",
+                  "exit_ticket": "number",
+                  "preview": "number"
+                }
+              },
+              "instructional_steps": {
+                "type": "string",
+                "format": "HTML"
+              },
+              "differentiation": {
+                "type": "object",
+                "fields": {
+                  "struggling": "string",
+                  "on_level": "string",
+                  "advanced": "string"
+                }
+              },
+              "common_misconceptions": {
+                "type": "array<string>"
+              }
+            }
+          },
+          
+          "assessments": {
+            "type": "object",
+            "fields": {
+              "exit_ticket": {
+                "type": "object",
+                "fields": {
+                  "questions": {
+                    "type": "array",
+                    "items": {
+                      "question_id": "string",
+                      "text": "string",
+                      "type": "enum (short_answer, multiple_choice)",
+                      "correct_answer": "string",
+                      "points": "number"
+                    }
+                  }
+                }
+              },
+              "quiz": {
+                "type": "object",
+                "fields": {
+                  "questions": {
+                    "type": "array (5 questions)",
+                    "items": {
+                      "question_id": "string",
+                      "text": "string",
+                      "type": "multiple_choice",
+                      "options": "array<string> (4 options)",
+                      "correct_answer": "string",
+                      "points": "number"
+                    }
+                  }
+                }
+              },
+              "project": {
+                "type": "object",
+                "fields": {
+                  "title": "string",
+                  "description": "string (HTML)",
+                  "rubric": {
+                    "type": "object",
+                    "fields": {
+                      "criteria": {
+                        "type": "array",
+                        "items": {
+                          "criterion": "string",
+                          "levels": {
+                            "exceeds": "string",
+                            "meets": "string",
+                            "developing": "string",
+                            "beginning": "string"
+                          },
+                          "weight": "number (0-1, sums to 1.0)"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          
+          "federal_alignment": {
+            "type": "object",
+            "fields": {
+              "gear_up_objective": {
+                "type": "number",
+                "enum": [1, 2, 3, 4],
+                "description": "Maps to 34 CFR § 694.21 objectives"
+              },
+              "sc_standards": {
+                "type": "array<string>",
+                "example": ["7.A.1.2", "7.A.2.1"]
+              },
+              "common_core": {
+                "type": "array<string>",
+                "example": ["CCSS.MATH.7.EE.A.1"]
+              }
+            }
+          },
+          
+          "created_at": "timestamp",
+          "updated_at": "timestamp",
+          "published": "boolean",
+          "version": "string (semantic versioning, e.g., '1.2')"
+        }
+      },
+      
+      "students": {
+        "description": "Student records with module progress and demographics",
+        "document_id": "student_id (string, from SIS)",
+        "indexes": ["school_id", "grade", "cohort_year", "demographics.frl_status"],
+        "fields": {
+          "student_id": "string (unique, from SIS)",
+          "school_id": "string (FK to schools)",
+          "district_id": "string",
+          
+          "first_name": "string",
+          "last_name": "string",
+          "grade": "number (7-12)",
+          "cohort_year": "number (year entered 7th grade)",
+          
+          "demographics": {
+            "frl_status": "boolean",
+            "ell_status": "boolean",
+            "sped_status": "boolean",
+            "race_ethnicity": "string (NCES codes)",
+            "gender": "string"
+          },
+          
+          "parent_email": "string",
+          "parent_phone": "string",
+          "parent_sms_opt_in": "boolean",
+          
+          "modules_completed": "array<string> (module_ids)",
+          "modules_in_progress": "array<string>",
+          
+          "module_progress": {
+            "type": "array",
+            "items": {
+              "module_id": "string",
+              "started_at": "timestamp",
+              "completed_at": "timestamp | null",
+              "time_spent_minutes": "number",
+              "chapters_completed": "array<number>",
+              "current_chapter": "number",
+              "exit_ticket_score": "number (out of 3)",
+              "quiz_score": "number (out of 5)",
+              "quiz_attempts": "number",
+              "project_submitted": "boolean",
+              "project_score": "number (out of 4.0, rubric average)",
+              "last_activity_at": "timestamp"
+            }
+          },
+          
+          "college_readiness_milestones": {
+            "type": "object",
+            "description": "Track progress toward grade-level completion goals",
+            "fields": {
+              "grade_7": {
+                "modules_required": "number (e.g., 2)",
+                "modules_completed": "number",
+                "status": "enum (not_started, in_progress, completed)"
+              },
+              "grade_8": "object (same structure)",
+              "grade_9": "object",
+              "grade_10": "object",
+              "grade_11": "object",
+              "grade_12": "object"
+            }
+          },
+          
+          "fafsa_completion": {
+            "eligible": "boolean (true when grade 12)",
+            "completed": "boolean",
+            "completion_date": "timestamp | null"
+          },
+          
+          "created_at": "timestamp",
+          "updated_at": "timestamp"
+        }
+      },
+      
+      "schools": {
+        "description": "School-level GEAR UP metrics and coordinator info",
+        "document_id": "school_id (string)",
+        "indexes": ["district_id", "state_director_id"],
+        "fields": {
+          "school_id": "string (unique)",
+          "district_id": "string",
+          "state_director_id": "string (FK to users)",
+          
+          "school_name": "string",
+          "coordinator_name": "string",
+          "coordinator_email": "string",
+          
+          "grades_served": "array<number>",
+          "gear_up_cohorts": "array<number> (cohort years active)",
+          "total_gear_up_students": "number",
+          
+          "completion_metrics": {
+            "overall_completion_rate": "number (0-1)",
+            "by_grade": {
+              "7": "number",
+              "8": "number",
+              "9": "number",
+              "10": "number",
+              "11": "number",
+              "12": "number"
+            },
+            "by_pillar": {
+              "academic_preparation": "number",
+              "college_aspiration": "number",
+              "college_entry": "number"
+            }
+          },
+          
+          "equity_metrics": {
+            "completion_parity_index": "number (0-1, 1.0 = perfect parity)",
+            "subgroup_gaps": {
+              "type": "array",
+              "items": {
+                "subgroup": "string",
+                "completion_rate": "number",
+                "gap_to_overall": "number (negative = below, positive = above)"
+              }
+            }
+          },
+          
+          "teacher_engagement": {
+            "teachers_using_platform": "number",
+            "total_teachers": "number",
+            "avg_modules_assigned_per_teacher": "number"
+          },
+          
+          "created_at": "timestamp",
+          "updated_at": "timestamp"
+        }
+      },
+      
+      "users": {
+        "description": "All platform users (state director, coordinators, teachers, parents, students)",
+        "document_id": "user_id (Firebase Auth UID)",
+        "indexes": ["email", "role", "school_id"],
+        "fields": {
+          "user_id": "string (Firebase Auth UID)",
+          "email": "string",
+          "firebase_uid": "string",
+          
+          "first_name": "string",
+          "last_name": "string",
+          
+          "role": {
+            "type": "string",
+            "enum": ["state_director", "school_coordinator", "teacher", "parent", "student"]
+          },
+          
+          "district_id": "string (required for state_director)",
+          "school_id": "string (null for state_director)",
+          
+          "classes_taught": "array<string> (for teachers, class IDs)",
+          "students_taught": "array<string> (for teachers, student IDs)",
+          
+          "children": "array<string> (for parents, student IDs)",
+          
+          "permissions": {
+            "view_all_schools": "boolean (state_director only)",
+            "view_school_data": "boolean",
+            "assign_modules": "boolean",
+            "view_student_progress": "boolean",
+            "export_apr_data": "boolean",
+            "edit_curriculum": "boolean"
+          },
+          
+          "last_login": "timestamp",
+          "created_at": "timestamp"
+        }
+      },
+      
+      "assignments": {
+        "description": "Module assignments from teachers/coordinators to students",
+        "document_id": "assignment_id (auto-generated)",
+        "indexes": ["assigned_by", "school_id", "due_date", "module_id"],
+        "fields": {
+          "assignment_id": "string",
+          "module_id": "string (FK to modules)",
+          
+          "assigned_by": "string (user_id of teacher/coordinator)",
+          "assigned_to_type": "enum (student, class, cohort, school)",
+          "assigned_to_ids": "array<string> (student_ids or class_ids)",
+          
+          "school_id": "string",
+          "grade": "number",
+          
+          "assigned_date": "timestamp",
+          "due_date": "timestamp",
+          
+          "instructions": "string (optional teacher note)",
+          
+          "completion_status": {
+            "total_assigned": "number",
+            "completed": "number",
+            "in_progress": "number",
+            "not_started": "number"
+          },
+          
+          "created_at": "timestamp"
+        }
+      },
+      
+      "alerts": {
+        "description": "Push notifications to parents and coordinators",
+        "document_id": "alert_id (auto-generated)",
+        "indexes": ["student_id", "parent_id", "sent_at", "read_at"],
+        "fields": {
+          "alert_id": "string",
+          "student_id": "string (FK to students)",
+          "parent_id": "string (FK to users where role=parent)",
+          
+          "alert_type": {
+            "type": "string",
+            "enum": ["module_not_started", "quiz_low_score", "completion_milestone", "module_overdue", "fafsa_reminder"]
+          },
+          "message": "string (human-readable notification text)",
+          "priority": "enum (low, medium, high)",
+          
+          "sent_at": "timestamp",
+          "read_at": "timestamp | null",
+          "response_status": "enum (acknowledged, action_taken, no_response)",
+          "response_at": "timestamp | null",
+          
+          "fcm_token": "string (Firebase Cloud Messaging token)",
+          "delivery_status": "enum (pending, delivered, failed)"
+        }
+      },
+      
+      "district_dashboard": {
+        "description": "Monthly rollup metrics for state director",
+        "document_id": "dashboard_id (format: 'dash_YYYY_MM')",
+        "indexes": ["district_id", "month"],
+        "fields": {
+          "dashboard_id": "string",
+          "district_id": "string",
+          "month": "string (format: YYYY-MM)",
+          
+          "students_served": "number (total across all schools)",
+          "schools_active": "number",
+          
+          "completion_metrics": {
+            "overall_rate": "number (0-1)",
+            "by_pillar": {
+              "academic_preparation": "number",
+              "college_aspiration": "number",
+              "college_entry": "number"
+            },
+            "by_grade": {
+              "7": "number",
+              "8": "number",
+              "9": "number",
+              "10": "number",
+              "11": "number",
+              "12": "number"
+            }
+          },
+          
+          "equity_metrics": {
+            "overall_parity_index": "number (0-1)",
+            "subgroup_completion_rates": {
+              "type": "array",
+              "items": {
+                "subgroup": "string",
+                "rate": "number"
+              }
+            }
+          },
+          
+          "fafsa_completion": {
+            "eligible_students": "number (Grade 12)",
+            "completed": "number",
+            "completion_rate": "number (0-1)"
+          },
+          
+          "apr_readiness": {
+            "data_complete": "number (0-1, % of required fields populated)",
+            "missing_fields": "array<string> (list of issues)",
+            "export_ready": "boolean"
+          },
+          
+          "generated_at": "timestamp"
+        }
+      },
+      
+      "messages": {
+        "description": "In-app messaging between roles",
+        "document_id": "message_id (auto-generated)",
+        "indexes": ["from_user_id", "to_user_id", "thread_id", "sent_at"],
+        "fields": {
+          "message_id": "string",
+          "from_user_id": "string (FK to users)",
+          "to_user_id": "string (FK to users)",
+          
+          "subject": "string",
+          "body": "string",
+          "thread_id": "string (for grouping replies)",
+          
+          "read_at": "timestamp | null",
+          "sent_at": "timestamp",
+          
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "enum (student_profile, module_link, document)",
+              "reference_id": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
