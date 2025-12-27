@@ -1,0 +1,4 @@
+# Railway trigger file
+# This file forces Railway to redeploy when committed
+# Last updated: $(date)
+
