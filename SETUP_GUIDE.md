@@ -7,7 +7,7 @@ This guide walks you through setting up GitHub and deploying to Railway.
 ### Step 1: Create GitHub Repository
 
 1. Go to https://github.com/new
-2. Repository name: `northstar-student-success-os` (or your preferred name)
+2. Repository name: `GEARUP_Platform` (or your preferred name)
 3. Description: "North Star Student Success OS - Role-based student success platform"
 4. Choose **Private** or **Public** (your choice)
 5. **DO NOT** initialize with README, .gitignore, or license (we already have these)
@@ -28,10 +28,10 @@ git add .
 git commit -m "Initial commit: North Star Student Success OS"
 
 # Add your GitHub repository as remote (replace YOUR_USERNAME with your GitHub username)
-git remote add origin https://github.com/YOUR_USERNAME/northstar-student-success-os.git
+git remote add origin https://github.com/YOUR_USERNAME/GEARUP_Platform.git
 
 # Or if using SSH:
-# git remote add origin git@github.com:YOUR_USERNAME/northstar-student-success-os.git
+# git remote add origin git@github.com:YOUR_USERNAME/GEARUP_Platform.git
 
 # Push to GitHub
 git branch -M main
@@ -91,7 +91,7 @@ Visit http://localhost:3000 and test login with:
 
 1. In Railway dashboard, click **New Project**
 2. Select **Deploy from GitHub repo**
-3. Find and select your `northstar-student-success-os` repository
+3. Find and select your `GEARUP_Platform` repository
 4. Click **Deploy Now**
 
 ### Step 3: Add MongoDB Service
