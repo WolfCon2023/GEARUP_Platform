@@ -1,0 +1,6 @@
+# Ignore Dockerfiles - we're using build commands instead
+Dockerfile
+apps/api/Dockerfile
+apps/web/Dockerfile
+.dockerignore
+
