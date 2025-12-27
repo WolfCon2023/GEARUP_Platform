@@ -3,27 +3,26 @@ FROM node:18-alpine
 # Install pnpm
 RUN npm install -g pnpm
 
-# Set working directory to monorepo root
+# Set working directory
 WORKDIR /app
 
-# Copy workspace configuration files first
+# Copy all files from project root (Railway will set build context)
+# Copy root package files
 COPY package.json pnpm-workspace.yaml ./
-
-# Copy lockfile if it exists (use wildcard to avoid error if missing)
 COPY pnpm-lock.yaml* ./
 
-# Copy packages
-COPY packages ./packages
+# Copy shared package
+COPY packages/shared ./packages/shared
 
 # Copy Web app
 COPY apps/web ./apps/web
 
-# Verify lockfile exists and install dependencies
+# Install dependencies
 RUN if [ -f pnpm-lock.yaml ]; then \
-      echo "Lockfile found, using frozen-lockfile"; \
+      echo "✓ Lockfile found, using frozen-lockfile"; \
       pnpm install --frozen-lockfile; \
     else \
-      echo "No lockfile found, installing normally"; \
+      echo "⚠ No lockfile found, installing normally"; \
       pnpm install; \
     fi
 
@@ -35,5 +34,5 @@ RUN pnpm build
 EXPOSE 3000
 
 # Start the server
+WORKDIR /app/apps/web
 CMD ["pnpm", "preview"]
-
