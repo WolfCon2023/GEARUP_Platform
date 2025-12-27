@@ -1,0 +1,16 @@
+# Don't ignore pnpm-lock.yaml - we need it!
+# pnpm-lock.yaml
+
+# Ignore these
+node_modules
+.git
+.env
+.env.local
+*.log
+.DS_Store
+dist
+build
+coverage
+.vscode
+.idea
+

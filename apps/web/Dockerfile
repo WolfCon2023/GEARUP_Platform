@@ -6,14 +6,26 @@ RUN npm install -g pnpm
 # Set working directory to monorepo root
 WORKDIR /app
 
-# Copy workspace configuration
-COPY package.json pnpm-workspace.yaml pnpm-lock.yaml* ./
+# Copy workspace configuration files first
+COPY package.json pnpm-workspace.yaml ./
+
+# Copy lockfile if it exists (use wildcard to avoid error if missing)
+COPY pnpm-lock.yaml* ./
+
+# Copy packages
 COPY packages ./packages
+
+# Copy Web app
 COPY apps/web ./apps/web
 
-# Install dependencies from root
-# If pnpm-lock.yaml exists, use frozen-lockfile, otherwise install normally
-RUN if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; else pnpm install; fi
+# Verify lockfile exists and install dependencies
+RUN if [ -f pnpm-lock.yaml ]; then \
+      echo "Lockfile found, using frozen-lockfile"; \
+      pnpm install --frozen-lockfile; \
+    else \
+      echo "No lockfile found, installing normally"; \
+      pnpm install; \
+    fi
 
 # Build the web app
 WORKDIR /app/apps/web
