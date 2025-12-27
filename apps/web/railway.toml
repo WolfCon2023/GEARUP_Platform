@@ -1,0 +1,10 @@
+# Railway configuration for Web service
+[build]
+builder = "dockerfile"
+dockerfilePath = "apps/web/Dockerfile"
+
+[deploy]
+startCommand = "pnpm preview"
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
+

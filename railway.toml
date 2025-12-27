@@ -1,0 +1,11 @@
+# Railway configuration file
+# This ensures Railway uses the correct build settings
+
+[build]
+builder = "dockerfile"
+
+[deploy]
+startCommand = "pnpm start"
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
+
