@@ -1,12 +1,18 @@
+[providers]
+node = "18"
+
 [phases.setup]
-nixPkgs = ["nodejs-18_x", "pnpm"]
+nixPkgs = ["nodejs-18_x"]
+cmds = ["npm install -g pnpm"]
 
 [phases.install]
 cmds = ["pnpm install --frozen-lockfile"]
 
 [phases.build]
-cmds = ["pnpm build"]
+# Build will be determined by APP environment variable
+cmds = [
+  "if [ \"$APP\" = \"api\" ]; then pnpm build:api; elif [ \"$APP\" = \"web\" ]; then pnpm build:web; else echo 'Set APP=api or APP=web'; exit 1; fi"
+]
 
 [start]
-cmd = "cd apps/api && pnpm start"
-
+cmd = "if [ \"$APP\" = \"api\" ]; then pnpm start:api; elif [ \"$APP\" = \"web\" ]; then pnpm start:web; else echo 'Set APP=api or APP=web'; exit 1; fi"
