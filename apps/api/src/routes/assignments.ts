@@ -1,10 +1,10 @@
-import express from 'express';
+import express, { type Router } from 'express';
 import { AssignmentCreateSchema, AssignmentUpdateSchema, AssignmentQuerySchema } from '@northstar/shared';
 import { Assignment } from '../models/Assignment';
 import { requireAuth, requireRole, AuthRequest } from '../middleware/auth';
 import { scopeCheck } from '../middleware/scope';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Get all assignments (with filters and scoping)
 router.get('/', requireAuth, async (req: AuthRequest, res, next) => {
@@ -170,4 +170,6 @@ router.delete('/:id', requireAuth, requireRole('teacher', 'school_coordinator', 
 });
 
 export default router;
+
+
 

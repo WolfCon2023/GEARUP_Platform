@@ -1,11 +1,11 @@
-import express from 'express';
+import express, { type Router } from 'express';
 import { requireAuth, AuthRequest } from '../middleware/auth';
 import { APRReportQuerySchema, DataCompletenessQuerySchema } from '@northstar/shared';
 import { Student } from '../models/Student';
 import { School } from '../models/School';
 import { Assignment } from '../models/Assignment';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // APR Export (CSV)
 router.get('/apr', requireAuth, async (req: AuthRequest, res, next) => {
@@ -173,4 +173,6 @@ router.get('/data-completeness', requireAuth, async (req: AuthRequest, res, next
 });
 
 export default router;
+
+
 

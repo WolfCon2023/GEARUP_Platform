@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { type Router } from 'express';
 import { requireAuth, AuthRequest } from '../middleware/auth';
 import { Student } from '../models/Student';
 import { School } from '../models/School';
@@ -7,7 +7,7 @@ import { Alert } from '../models/Alert';
 import { Module } from '../models/Module';
 import { DistrictDashboard } from '../models/DistrictDashboard';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // District Dashboard (director)
 router.get('/district', requireAuth, async (req: AuthRequest, res, next) => {
@@ -247,4 +247,6 @@ router.get('/parent', requireAuth, async (req: AuthRequest, res, next) => {
 });
 
 export default router;
+
+
 

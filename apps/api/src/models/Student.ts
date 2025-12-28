@@ -88,3 +88,5 @@ StudentSchema.index({ district_id: 1 });
 
 export const Student = mongoose.model<StudentDocument>('Student', StudentSchema);
 
+
+

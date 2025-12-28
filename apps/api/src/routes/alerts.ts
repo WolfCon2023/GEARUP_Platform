@@ -1,10 +1,10 @@
-import express from 'express';
+import express, { type Router } from 'express';
 import { AlertCreateSchema, AlertUpdateSchema, AlertQuerySchema } from '@northstar/shared';
 import { Alert } from '../models/Alert';
 import { requireAuth, requireRole, AuthRequest } from '../middleware/auth';
 import { scopeCheck } from '../middleware/scope';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Get all alerts (role scoped)
 router.get('/', requireAuth, async (req: AuthRequest, res, next) => {
@@ -150,4 +150,6 @@ router.put('/:id', requireAuth, async (req: AuthRequest, res, next) => {
 });
 
 export default router;
+
+
 

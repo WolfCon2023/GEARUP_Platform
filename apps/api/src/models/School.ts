@@ -84,3 +84,5 @@ const SchoolSchema = new Schema<SchoolDocument>(
 
 export const School = mongoose.model<SchoolDocument>('School', SchoolSchema);
 
+
+

@@ -1,9 +1,9 @@
-import express from 'express';
+import express, { type Router } from 'express';
 import { ModuleQuerySchema, ModuleCreateSchema, ModuleUpdateSchema } from '@northstar/shared';
 import { Module } from '../models/Module';
 import { requireAuth, requireRole, AuthRequest } from '../middleware/auth';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Get all modules (with filters)
 router.get('/', requireAuth, async (req: AuthRequest, res, next) => {
@@ -119,4 +119,6 @@ router.put('/:moduleId', requireAuth, requireRole('state_director'), async (req,
 });
 
 export default router;
+
+
 

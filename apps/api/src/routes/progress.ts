@@ -1,11 +1,11 @@
-import express from 'express';
+import express, { type Router } from 'express';
 import { ProgressUpdateSchema } from '@northstar/shared';
 import { Student } from '../models/Student';
 import { Module } from '../models/Module';
 import { requireAuth, AuthRequest } from '../middleware/auth';
 import { scopeCheck } from '../middleware/scope';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Update progress
 router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
@@ -88,7 +88,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
           if (module) {
             let score = 0;
             let totalPoints = 0;
-            module.assessments.quiz.questions.forEach(q => {
+            module.assessments.quiz.questions.forEach((q: any) => {
               totalPoints += q.points;
               if (data.quiz_answers![q.question_id] !== undefined) {
                 score += q.points * 0.85; // Assume 85% correct for now
@@ -151,4 +151,6 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
 });
 
 export default router;
+
+
 

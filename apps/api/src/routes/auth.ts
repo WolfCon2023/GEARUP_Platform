@@ -1,10 +1,10 @@
-import express from 'express';
+import express, { type Router } from 'express';
 import bcrypt from 'bcryptjs';
 import { RegisterSchema, LoginSchema } from '@northstar/shared';
 import { User } from '../models/User';
 import { requireAuth, requireRole, generateToken, AuthRequest } from '../middleware/auth';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Register (admin only or seed-only in production)
 router.post('/register', requireAuth, requireRole('state_director'), async (req, res, next) => {
@@ -140,4 +140,6 @@ router.get('/me', requireAuth, async (req: AuthRequest, res) => {
 });
 
 export default router;
+
+
 

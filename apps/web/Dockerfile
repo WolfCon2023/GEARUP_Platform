@@ -22,9 +22,9 @@ COPY apps/web ./apps/web
 # Install all dependencies (from root, handles workspaces)
 RUN pnpm install --frozen-lockfile
 
-# Build shared package first (if it has a build step)
+# Build shared package first (required dependency)
 WORKDIR /app/packages/shared
-RUN pnpm build || echo "No build script in shared package"
+RUN pnpm build
 
 # Build Web app
 WORKDIR /app/apps/web

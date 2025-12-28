@@ -59,3 +59,5 @@ AlertSchema.index({ response_status: 1, priority: 1 });
 
 export const Alert = mongoose.model<AlertDocument>('Alert', AlertSchema);
 
+
+
