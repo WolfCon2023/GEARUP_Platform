@@ -1,20 +1,20 @@
 {
   "name": "@northstar/shared",
   "version": "1.0.0",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch"
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "clean": "rm -rf dist"
   },
   "dependencies": {
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/node": "^20.10.0",
     "typescript": "^5.3.3"
   }
 }
-
-
-

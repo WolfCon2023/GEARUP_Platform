@@ -1,4 +1,5 @@
 import express, { type Router } from 'express';
+import type { ModuleProgressEntry, Question } from '@northstar/shared';
 import { ProgressUpdateSchema } from '@northstar/shared';
 import { Student } from '../models/Student';
 import { Module } from '../models/Module';
@@ -24,7 +25,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
     }
 
     // Find or create module progress entry
-    let progressEntry = (student.module_progress as any[]).find((p: any) => p.module_id === data.module_id);
+    let progressEntry = (student.module_progress as ModuleProgressEntry[]).find((p: ModuleProgressEntry) => p.module_id === data.module_id);
     
     if (!progressEntry) {
       progressEntry = {
@@ -70,7 +71,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
           if (module && data.exit_ticket_answers) {
             let score = 0;
             let totalPoints = 0;
-            (module.assessments.exit_ticket.questions as any[]).forEach((q: any) => {
+            (module.assessments.exit_ticket.questions as Question[]).forEach((q: Question) => {
               totalPoints += q.points;
               // Simplified scoring - in production, check answers properly
               if (data.exit_ticket_answers![q.question_id] !== undefined) {
@@ -89,7 +90,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
           if (module && data.quiz_answers) {
             let score = 0;
             let totalPoints = 0;
-            (module.assessments.quiz.questions as any[]).forEach((q: any) => {
+            (module.assessments.quiz.questions as Question[]).forEach((q: Question) => {
               totalPoints += q.points;
               if (data.quiz_answers![q.question_id] !== undefined) {
                 score += q.points * 0.85; // Assume 85% correct for now
@@ -109,7 +110,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
           if (module) {
             let totalScore = 0;
             let maxScore = 0;
-            module.assessments.project.rubric.criteria.forEach((c: any) => {
+            (module.assessments.project.rubric.criteria as Array<{ criterion: string; points: number; description: string }>).forEach((c: { criterion: string; points: number; description: string }) => {
               maxScore += c.points;
               const studentScore = data.project_submission!.rubric_scores[c.criterion] || 0;
               totalScore += Math.min(studentScore, c.points);
@@ -127,7 +128,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
       progressEntry.completed_at = new Date();
       
       // Move from in_progress to completed
-      student.modules_in_progress = (student.modules_in_progress as string[]).filter((id: string) => id !== data.module_id);
+      student.modules_in_progress = (student.modules_in_progress as string[]).filter((id: string): boolean => id !== data.module_id);
       if (!student.modules_completed.includes(data.module_id)) {
         student.modules_completed.push(data.module_id);
       }

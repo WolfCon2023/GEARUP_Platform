@@ -1,4 +1,5 @@
 import express, { type Router } from 'express';
+import type { ModuleProgressEntry } from '@northstar/shared';
 import { requireAuth, AuthRequest } from '../middleware/auth';
 import { APRReportQuerySchema, DataCompletenessQuerySchema } from '@northstar/shared';
 import { Student } from '../models/Student';
@@ -52,10 +53,10 @@ router.get('/apr', requireAuth, async (req: AuthRequest, res, next) => {
         : 0;
       
       const avgScore = student.module_progress.length > 0
-        ? (student.module_progress as any[])
-            .filter((p: any) => p.quiz_score !== undefined)
-            .reduce((sum: number, p: any) => sum + (p.quiz_score || 0), 0) / 
-          (student.module_progress as any[]).filter((p: any) => p.quiz_score !== undefined).length
+        ? (student.module_progress as ModuleProgressEntry[])
+            .filter((p: ModuleProgressEntry) => p.quiz_score !== undefined)
+            .reduce((sum: number, p: ModuleProgressEntry) => sum + (p.quiz_score || 0), 0) / 
+          (student.module_progress as ModuleProgressEntry[]).filter((p: ModuleProgressEntry) => p.quiz_score !== undefined).length
         : 0;
 
       csvRows.push([
@@ -83,7 +84,7 @@ router.get('/apr', requireAuth, async (req: AuthRequest, res, next) => {
       !s.parent_contacts || s.parent_contacts.length === 0
     ).length;
     const missingScores = students.filter((s: any) => 
-      (s.module_progress as any[]).every((p: any) => p.quiz_score === undefined)
+      (s.module_progress as ModuleProgressEntry[]).every((p: ModuleProgressEntry) => p.quiz_score === undefined)
     ).length;
 
     const completeness = {

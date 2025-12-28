@@ -1,4 +1,5 @@
 import express, { type Router } from 'express';
+import type { ModuleProgressEntry } from '@northstar/shared';
 import { requireAuth, AuthRequest } from '../middleware/auth';
 import { Student } from '../models/Student';
 import { School } from '../models/School';
@@ -36,7 +37,7 @@ router.get('/district', requireAuth, async (req: AuthRequest, res, next) => {
       const completionRate = totalModulesAssigned > 0 ? (modulesCompleted / totalModulesAssigned) * 100 : 0;
 
       const avgTime = students.reduce((sum: number, s: any) => {
-        const totalTime = (s.module_progress as any[]).reduce((t: number, p: any) => t + (p.time_spent_minutes || 0), 0);
+        const totalTime = (s.module_progress as ModuleProgressEntry[]).reduce((t: number, p: ModuleProgressEntry) => t + (p.time_spent_minutes || 0), 0);
         return sum + totalTime;
       }, 0) / (students.length || 1);
 
@@ -134,7 +135,9 @@ router.get('/teacher', requireAuth, async (req: AuthRequest, res, next) => {
     const assignments = await Assignment.find({ assigned_by: req.user.user_id });
     const studentIds = new Set<string>();
     assignments.forEach((a: any) => {
-      (a.assigned_to_ids as string[]).forEach((id: string) => studentIds.add(id));
+      (a.assigned_to_ids as string[]).forEach((id: string) => {
+        studentIds.add(id);
+      });
     });
 
     const students = await Student.find({ student_id: { $in: Array.from(studentIds) } });
@@ -229,10 +232,10 @@ router.get('/parent', requireAuth, async (req: AuthRequest, res, next) => {
           last_name: s.last_name,
           grade: s.grade,
           modules_completed: s.modules_completed.length,
-          recent_scores: (s.module_progress as any[])
-            .filter((p: any) => p.quiz_score !== undefined)
+          recent_scores: (s.module_progress as ModuleProgressEntry[])
+            .filter((p: ModuleProgressEntry) => p.quiz_score !== undefined)
             .slice(-5)
-            .map((p: any) => ({
+            .map((p: ModuleProgressEntry) => ({
               module_id: p.module_id,
               quiz_score: p.quiz_score,
             })),

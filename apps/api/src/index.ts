@@ -44,12 +44,14 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 
 // Connect to MongoDB
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/northstar';
+const port = Number(process.env.PORT ?? 3000);
+
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
     console.log('Connected to MongoDB');
-    app.listen(PORT, () => {
-      console.log(`API server running on port ${PORT}`);
+    app.listen(port, '0.0.0.0', () => {
+      console.log(`API listening on ${port}`);
     });
   })
   .catch((error) => {
