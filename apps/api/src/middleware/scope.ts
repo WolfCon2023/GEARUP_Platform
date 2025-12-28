@@ -55,7 +55,7 @@ export const scopeCheck = {
     }
     if (req.user?.role === 'parent') {
       const student = await Student.findOne({ student_id: studentId });
-      return student?.parent_contacts.some(pc => pc.parent_id === req.user?.user_id) || false;
+      return student?.parent_contacts.some((pc: any) => pc.parent_id === req.user?.user_id) || false;
     }
     return false;
   },
