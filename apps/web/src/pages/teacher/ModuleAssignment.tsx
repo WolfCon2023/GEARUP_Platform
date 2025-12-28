@@ -6,7 +6,7 @@ import { useAuthStore } from '../../store/authStore';
 export default function ModuleAssignment() {
   const [selectedModule, setSelectedModule] = useState('');
   const [assignedToType, setAssignedToType] = useState<'student' | 'class' | 'cohort'>('student');
-  const [assignedToIds, setAssignedToIds] = useState<string[]>([]);
+  const [assignedToIds] = useState<string[]>([]);
   const [dueDate, setDueDate] = useState('');
   const [instructions, setInstructions] = useState('');
   const { user } = useAuthStore();

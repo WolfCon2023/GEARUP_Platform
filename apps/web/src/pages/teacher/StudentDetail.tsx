@@ -1,6 +1,4 @@
 import { useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { modulesAPI } from '../../lib/api';
 import ProgressRing from '../../components/ProgressRing';
 
 export default function StudentDetail() {

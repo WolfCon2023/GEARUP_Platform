@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { UserRole, JWTPayload } from '@northstar/shared';
+import type { UserRole } from '@northstar/shared';
 
 interface User {
   user_id: string;

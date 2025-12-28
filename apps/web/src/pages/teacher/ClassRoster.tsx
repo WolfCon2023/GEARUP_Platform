@@ -4,7 +4,7 @@ import { assignmentsAPI } from '../../lib/api';
 import StudentCard from '../../components/StudentCard';
 
 export default function ClassRoster() {
-  const { data, isLoading } = useQuery({
+  const { isLoading } = useQuery({
     queryKey: ['assignments'],
     queryFn: () => assignmentsAPI.getAll(),
   });

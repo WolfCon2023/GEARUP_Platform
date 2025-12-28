@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import type { UserRole } from '@northstar/shared';
 import { useAuthStore } from '../store/authStore';
 import { authAPI } from '../lib/api';
 
@@ -22,13 +23,15 @@ export default function Login() {
         setAuth(response.data.user, response.data.token);
         
         // Redirect based on role
-        const rolePath = {
+        const rolePathByRole: Record<UserRole, string> = {
           state_director: '/director',
           school_coordinator: '/coordinator',
           teacher: '/teacher',
           student: '/student',
           parent: '/parent',
-        }[response.data.user.role] || '/';
+        };
+        const role = response.data.user.role as UserRole;
+        const rolePath = rolePathByRole[role] ?? '/';
         
         navigate(rolePath);
       }

@@ -34,7 +34,7 @@ WORKDIR /app/apps/${APP}
 CMD if [ "$APP" = "api" ]; then \
       pnpm start; \
     elif [ "$APP" = "web" ]; then \
-      pnpm preview; \
+      pnpm run preview:railway; \
     else \
       echo "ERROR: APP must be 'api' or 'web'"; \
       exit 1; \

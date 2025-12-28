@@ -13,7 +13,7 @@ import reportRoutes from './routes/reports';
 dotenv.config();
 
 const app: Express = express();
-const PORT = process.env.PORT || 3001;
+const port = Number(process.env.PORT ?? 3000);
 
 // Middleware
 app.use(cors());
@@ -42,22 +42,27 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   });
 });
 
-// Connect to MongoDB
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/northstar';
-const port = Number(process.env.PORT ?? 3000);
+// Start server first (Railway expects us to listen on $PORT)
+app.listen(port, '0.0.0.0', () => {
+  console.log(`API listening on ${port}`);
+});
 
-mongoose
-  .connect(MONGODB_URI)
-  .then(() => {
+// Connect to MongoDB (retry instead of crashing the process)
+const MONGODB_URI = process.env.MONGODB_URI;
+async function connectWithRetry() {
+  if (!MONGODB_URI) {
+    console.error('MONGODB_URI is not set. API will run but DB-backed routes will fail until it is configured.');
+    return;
+  }
+  try {
+    await mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 5000 });
     console.log('Connected to MongoDB');
-    app.listen(port, '0.0.0.0', () => {
-      console.log(`API listening on ${port}`);
-    });
-  })
-  .catch((error) => {
-    console.error('MongoDB connection error:', error);
-    process.exit(1);
-  });
+  } catch (error) {
+    console.error('MongoDB connection error (will retry in 5s):', error);
+    setTimeout(connectWithRetry, 5000);
+  }
+}
+connectWithRetry();
 
 export default app;
 

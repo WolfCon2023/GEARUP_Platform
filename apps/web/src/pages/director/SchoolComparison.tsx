@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { modulesAPI } from '../../lib/api';
 
 export default function SchoolComparison() {
   const [filters, setFilters] = useState({ grade: '', subject: '' });

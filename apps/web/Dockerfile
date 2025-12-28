@@ -37,4 +37,4 @@ EXPOSE 3000
 WORKDIR /app/apps/web
 
 # Start the web server
-CMD ["pnpm", "preview"]
+CMD ["pnpm", "run", "preview:railway"]
