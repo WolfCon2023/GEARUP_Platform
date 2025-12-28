@@ -24,7 +24,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
     }
 
     // Find or create module progress entry
-    let progressEntry = student.module_progress.find(p => p.module_id === data.module_id);
+    let progressEntry = student.module_progress.find((p: any) => p.module_id === data.module_id);
     const isNewEntry = !progressEntry;
 
     if (isNewEntry) {
@@ -69,7 +69,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
           if (module) {
             let score = 0;
             let totalPoints = 0;
-            module.assessments.exit_ticket.questions.forEach(q => {
+            module.assessments.exit_ticket.questions.forEach((q: any) => {
               totalPoints += q.points;
               // Simplified scoring - in production, check answers properly
               if (data.exit_ticket_answers[q.question_id] !== undefined) {
@@ -108,7 +108,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
           if (module) {
             let totalScore = 0;
             let maxScore = 0;
-            module.assessments.project.rubric.criteria.forEach(c => {
+            module.assessments.project.rubric.criteria.forEach((c: any) => {
               maxScore += c.points;
               const studentScore = data.project_submission!.rubric_scores[c.criterion] || 0;
               totalScore += Math.min(studentScore, c.points);
@@ -126,7 +126,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
       progressEntry.completed_at = new Date();
       
       // Move from in_progress to completed
-      student.modules_in_progress = student.modules_in_progress.filter(id => id !== data.module_id);
+      student.modules_in_progress = student.modules_in_progress.filter((id: string) => id !== data.module_id);
       if (!student.modules_completed.includes(data.module_id)) {
         student.modules_completed.push(data.module_id);
       }

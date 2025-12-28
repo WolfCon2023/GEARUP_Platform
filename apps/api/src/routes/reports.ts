@@ -53,9 +53,9 @@ router.get('/apr', requireAuth, async (req: AuthRequest, res, next) => {
       
       const avgScore = student.module_progress.length > 0
         ? student.module_progress
-            .filter(p => p.quiz_score !== undefined)
-            .reduce((sum, p) => sum + (p.quiz_score || 0), 0) / 
-          student.module_progress.filter(p => p.quiz_score !== undefined).length
+            .filter((p: any) => p.quiz_score !== undefined)
+            .reduce((sum: number, p: any) => sum + (p.quiz_score || 0), 0) / 
+          student.module_progress.filter((p: any) => p.quiz_score !== undefined).length
         : 0;
 
       csvRows.push([
@@ -131,16 +131,16 @@ router.get('/data-completeness', requireAuth, async (req: AuthRequest, res, next
       total_students: students.length,
       total_schools: schools.length,
       missing_data: {
-        demographics: students.filter(s => 
+        demographics: students.filter((s: any) => 
           !s.demographics || Object.keys(s.demographics).length === 0
         ).length,
-        parent_contacts: students.filter(s => 
+        parent_contacts: students.filter((s: any) => 
           !s.parent_contacts || s.parent_contacts.length === 0
         ).length,
-        module_progress: students.filter(s => 
+        module_progress: students.filter((s: any) => 
           !s.module_progress || s.module_progress.length === 0
         ).length,
-        fafsa_status: students.filter(s => 
+        fafsa_status: students.filter((s: any) => 
           !s.fafsa_completion || s.fafsa_completion.completed === undefined
         ).length,
       },

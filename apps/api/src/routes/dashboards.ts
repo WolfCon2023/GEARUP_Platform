@@ -35,8 +35,8 @@ router.get('/district', requireAuth, async (req: AuthRequest, res, next) => {
       const modulesCompleted = students.reduce((sum, s) => sum + s.modules_completed.length, 0);
       const completionRate = totalModulesAssigned > 0 ? (modulesCompleted / totalModulesAssigned) * 100 : 0;
 
-      const avgTime = students.reduce((sum, s) => {
-        const totalTime = s.module_progress.reduce((t, p) => t + p.time_spent_minutes, 0);
+      const avgTime = students.reduce((sum: number, s: any) => {
+        const totalTime = s.module_progress.reduce((t: number, p: any) => t + p.time_spent_minutes, 0);
         return sum + totalTime;
       }, 0) / (students.length || 1);
 
@@ -133,8 +133,8 @@ router.get('/teacher', requireAuth, async (req: AuthRequest, res, next) => {
 
     const assignments = await Assignment.find({ assigned_by: req.user.user_id });
     const studentIds = new Set<string>();
-    assignments.forEach(a => {
-      a.assigned_to_ids.forEach(id => studentIds.add(id));
+    assignments.forEach((a: any) => {
+      a.assigned_to_ids.forEach((id: string) => studentIds.add(id));
     });
 
     const students = await Student.find({ student_id: { $in: Array.from(studentIds) } });
@@ -142,10 +142,10 @@ router.get('/teacher', requireAuth, async (req: AuthRequest, res, next) => {
     // Calculate completion stats
     let totalAssigned = 0;
     let completed = 0;
-    assignments.forEach(a => {
+    assignments.forEach((a: any) => {
       totalAssigned += a.assigned_to_ids.length;
-      a.assigned_to_ids.forEach(studentId => {
-        const student = students.find(s => s.student_id === studentId);
+      a.assigned_to_ids.forEach((studentId: string) => {
+        const student = students.find((s: any) => s.student_id === studentId);
         if (student && student.modules_completed.includes(a.module_id)) {
           completed++;
         }
@@ -223,16 +223,16 @@ router.get('/parent', requireAuth, async (req: AuthRequest, res, next) => {
     res.json({
       success: true,
       data: {
-        children: students.map(s => ({
+        children: students.map((s: any) => ({
           student_id: s.student_id,
           first_name: s.first_name,
           last_name: s.last_name,
           grade: s.grade,
           modules_completed: s.modules_completed.length,
           recent_scores: s.module_progress
-            .filter(p => p.quiz_score !== undefined)
+            .filter((p: any) => p.quiz_score !== undefined)
             .slice(-5)
-            .map(p => ({
+            .map((p: any) => ({
               module_id: p.module_id,
               quiz_score: p.quiz_score,
             })),
