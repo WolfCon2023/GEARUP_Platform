@@ -32,7 +32,7 @@ router.get('/district', requireAuth, async (req: AuthRequest, res, next) => {
       
       // Calculate metrics
       const totalModulesAssigned = await Assignment.countDocuments({});
-      const modulesCompleted = students.reduce((sum, s) => sum + s.modules_completed.length, 0);
+      const modulesCompleted = students.reduce((sum: number, s: any) => sum + s.modules_completed.length, 0);
       const completionRate = totalModulesAssigned > 0 ? (modulesCompleted / totalModulesAssigned) * 100 : 0;
 
       const avgTime = students.reduce((sum: number, s: any) => {
