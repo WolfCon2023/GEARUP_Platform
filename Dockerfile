@@ -31,4 +31,11 @@ RUN if [ "$APP" = "api" ]; then \
 EXPOSE 3000
 
 WORKDIR /app/apps/${APP}
-CMD ["pnpm", "start"]
+CMD if [ "$APP" = "api" ]; then \
+      pnpm start; \
+    elif [ "$APP" = "web" ]; then \
+      pnpm preview; \
+    else \
+      echo "ERROR: APP must be 'api' or 'web'"; \
+      exit 1; \
+    fi
