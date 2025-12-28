@@ -1,16 +1,48 @@
-# Don't ignore pnpm-lock.yaml - we need it!
-# pnpm-lock.yaml
-
-# Ignore these
+# Dependencies - will be installed during build
 node_modules
-.git
-.env
-.env.local
-*.log
-.DS_Store
+**/node_modules
+
+# Build outputs - will be generated during build
 dist
 build
-coverage
+**/dist
+**/build
+
+# Git
+.git
+.gitignore
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
 .vscode
 .idea
+*.swp
+*.swo
 
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Testing
+coverage
+.nyc_output
+
+# Railway
+.railway
+
+# Documentation (not needed in Docker)
+*.md
+!README.md
+
+# Temporary files
+*.tsbuildinfo
+.cache
