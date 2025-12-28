@@ -72,3 +72,5 @@ If build still fails after creating the lockfile:
 3. Make sure it's committed: `git ls-files | grep pnpm-lock.yaml`
 4. Try redeploying manually in Railway dashboard
 
+
+

@@ -36,7 +36,7 @@ router.get('/district', requireAuth, async (req: AuthRequest, res, next) => {
       const completionRate = totalModulesAssigned > 0 ? (modulesCompleted / totalModulesAssigned) * 100 : 0;
 
       const avgTime = students.reduce((sum: number, s: any) => {
-        const totalTime = s.module_progress.reduce((t: number, p: any) => t + p.time_spent_minutes, 0);
+        const totalTime = s.module_progress.reduce((t: number, p: any) => t + (p.time_spent_minutes || 0), 0);
         return sum + totalTime;
       }, 0) / (students.length || 1);
 

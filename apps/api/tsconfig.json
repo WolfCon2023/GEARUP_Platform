@@ -17,7 +17,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@northstar/shared": ["../../packages/shared/src", "../../packages/shared"]
+      "@northstar/shared": ["../../packages/shared/dist/index", "../../packages/shared/src/index"]
     }
   },
   "include": ["src/**/*"],

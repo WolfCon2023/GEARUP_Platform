@@ -59,3 +59,5 @@ export default function QuizPlayer({ questions, onSubmit }: QuizPlayerProps) {
   );
 }
 
+
+

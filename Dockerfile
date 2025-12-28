@@ -31,11 +31,11 @@ RUN echo "Building shared package..." && \
 WORKDIR /app
 RUN pnpm install --frozen-lockfile
 
-# Verify shared package is linked correctly
-RUN echo "Checking workspace link:" && \
-    ls -la node_modules/@northstar/ 2>/dev/null || echo "Workspace link check" && \
-    cd apps/api && \
-    pnpm list @northstar/shared || echo "Package check"
+# Verify shared package is linked correctly and dist exists
+RUN echo "Verifying shared package build and link..." && \
+    test -f packages/shared/dist/index.js || (echo "ERROR: shared package dist/index.js missing" && exit 1) && \
+    test -f packages/shared/dist/index.d.ts || (echo "ERROR: shared package dist/index.d.ts missing" && exit 1) && \
+    echo "Workspace link verified"
 
 # Build argument
 ARG APP=api
@@ -44,11 +44,13 @@ ENV APP=${APP}
 # Build based on APP
 WORKDIR /app
 RUN if [ "$APP" = "api" ]; then \
-      echo "Building API from root..." && \
-      pnpm --filter api build; \
+      echo "Building API..." && \
+      cd apps/api && \
+      pnpm build; \
     elif [ "$APP" = "web" ]; then \
-      echo "Building Web from root..." && \
-      pnpm --filter web build; \
+      echo "Building Web..." && \
+      cd apps/web && \
+      pnpm build; \
     else \
       echo "ERROR: APP must be 'api' or 'web'" && \
       exit 1; \
