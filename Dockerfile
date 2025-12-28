@@ -9,8 +9,8 @@ WORKDIR /app
 # Copy package files
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 
-# Copy packages
-COPY packages ./packages
+# Copy shared package
+COPY packages/shared ./packages/shared
 
 # Copy apps
 COPY apps ./apps
@@ -18,11 +18,16 @@ COPY apps ./apps
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
+# Build shared package first (REQUIRED - must be built before API/Web)
+WORKDIR /app/packages/shared
+RUN pnpm build
+
 # Build argument
 ARG APP=api
 ENV APP=${APP}
 
 # Build based on APP
+WORKDIR /app
 RUN if [ "$APP" = "api" ]; then \
       echo "Building API..." && \
       cd apps/api && \
@@ -40,6 +45,7 @@ RUN if [ "$APP" = "api" ]; then \
 EXPOSE 3001
 
 # Start based on APP
+WORKDIR /app
 CMD if [ "$APP" = "api" ]; then \
       cd apps/api && pnpm start; \
     elif [ "$APP" = "web" ]; then \
@@ -48,4 +54,3 @@ CMD if [ "$APP" = "api" ]; then \
       echo "ERROR: APP must be 'api' or 'web'"; \
       exit 1; \
     fi
-

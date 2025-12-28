@@ -82,8 +82,8 @@ router.get('/apr', requireAuth, async (req: AuthRequest, res, next) => {
     const missingParentContacts = students.filter(s => 
       !s.parent_contacts || s.parent_contacts.length === 0
     ).length;
-    const missingScores = students.filter(s => 
-      s.module_progress.every(p => p.quiz_score === undefined)
+    const missingScores = students.filter((s: any) => 
+      s.module_progress.every((p: any) => p.quiz_score === undefined)
     ).length;
 
     const completeness = {
