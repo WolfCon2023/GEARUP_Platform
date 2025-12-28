@@ -43,6 +43,11 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
       }
     }
 
+    // Ensure progressEntry is defined (TypeScript guard)
+    if (!progressEntry) {
+      return res.status(500).json({ success: false, error: 'Failed to create progress entry' });
+    }
+
     // Handle different actions
     switch (data.action) {
       case 'start_module':
@@ -72,7 +77,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
             module.assessments.exit_ticket.questions.forEach((q: any) => {
               totalPoints += q.points;
               // Simplified scoring - in production, check answers properly
-              if (data.exit_ticket_answers[q.question_id] !== undefined) {
+              if (data.exit_ticket_answers && data.exit_ticket_answers[q.question_id] !== undefined) {
                 score += q.points * 0.8; // Assume 80% correct for now
               }
             });
@@ -90,7 +95,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
             let totalPoints = 0;
             module.assessments.quiz.questions.forEach((q: any) => {
               totalPoints += q.points;
-              if (data.quiz_answers![q.question_id] !== undefined) {
+              if (data.quiz_answers && data.quiz_answers[q.question_id] !== undefined) {
                 score += q.points * 0.85; // Assume 85% correct for now
               }
             });
@@ -122,7 +127,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
 
     // Check if module is completed (all chapters done)
     const module = await Module.findOne({ module_id: data.module_id });
-    if (module && progressEntry.chapters_completed.length === module.student_content.chapters.length) {
+    if (module && progressEntry && progressEntry.chapters_completed.length === module.student_content.chapters.length) {
       progressEntry.completed_at = new Date();
       
       // Move from in_progress to completed
