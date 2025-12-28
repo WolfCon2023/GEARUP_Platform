@@ -24,7 +24,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
     }
 
     // Find or create module progress entry
-    let progressEntry = student.module_progress.find((p: any) => p.module_id === data.module_id);
+    let progressEntry = (student.module_progress as any[]).find((p: any) => p.module_id === data.module_id);
     
     if (!progressEntry) {
       progressEntry = {
@@ -70,7 +70,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
           if (module && data.exit_ticket_answers) {
             let score = 0;
             let totalPoints = 0;
-            module.assessments.exit_ticket.questions.forEach((q: any) => {
+            (module.assessments.exit_ticket.questions as any[]).forEach((q: any) => {
               totalPoints += q.points;
               // Simplified scoring - in production, check answers properly
               if (data.exit_ticket_answers![q.question_id] !== undefined) {
@@ -89,7 +89,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
           if (module && data.quiz_answers) {
             let score = 0;
             let totalPoints = 0;
-            module.assessments.quiz.questions.forEach((q: any) => {
+            (module.assessments.quiz.questions as any[]).forEach((q: any) => {
               totalPoints += q.points;
               if (data.quiz_answers![q.question_id] !== undefined) {
                 score += q.points * 0.85; // Assume 85% correct for now
@@ -127,7 +127,7 @@ router.post('/update', requireAuth, async (req: AuthRequest, res, next) => {
       progressEntry.completed_at = new Date();
       
       // Move from in_progress to completed
-      student.modules_in_progress = student.modules_in_progress.filter((id: string) => id !== data.module_id);
+      student.modules_in_progress = (student.modules_in_progress as string[]).filter((id: string) => id !== data.module_id);
       if (!student.modules_completed.includes(data.module_id)) {
         student.modules_completed.push(data.module_id);
       }

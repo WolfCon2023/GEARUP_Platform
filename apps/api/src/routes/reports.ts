@@ -52,10 +52,10 @@ router.get('/apr', requireAuth, async (req: AuthRequest, res, next) => {
         : 0;
       
       const avgScore = student.module_progress.length > 0
-        ? student.module_progress
+        ? (student.module_progress as any[])
             .filter((p: any) => p.quiz_score !== undefined)
             .reduce((sum: number, p: any) => sum + (p.quiz_score || 0), 0) / 
-          student.module_progress.filter((p: any) => p.quiz_score !== undefined).length
+          (student.module_progress as any[]).filter((p: any) => p.quiz_score !== undefined).length
         : 0;
 
       csvRows.push([
@@ -83,7 +83,7 @@ router.get('/apr', requireAuth, async (req: AuthRequest, res, next) => {
       !s.parent_contacts || s.parent_contacts.length === 0
     ).length;
     const missingScores = students.filter((s: any) => 
-      s.module_progress.every((p: any) => p.quiz_score === undefined)
+      (s.module_progress as any[]).every((p: any) => p.quiz_score === undefined)
     ).length;
 
     const completeness = {
