@@ -1,8 +1,8 @@
 import express, { type Router } from 'express';
 import { AssignmentCreateSchema, AssignmentUpdateSchema, AssignmentQuerySchema } from '@northstar/shared';
-import { Assignment } from '../models/Assignment';
-import { requireAuth, requireRole, AuthRequest } from '../middleware/auth';
-import { scopeCheck } from '../middleware/scope';
+import { Assignment } from '../models/Assignment.js';
+import { requireAuth, requireRole, AuthRequest } from '../middleware/auth.js';
+import { scopeCheck } from '../middleware/scope.js';
 
 const router: Router = express.Router();
 

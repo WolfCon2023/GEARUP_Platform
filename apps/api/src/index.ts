@@ -2,13 +2,13 @@ import express, { type Express } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import authRoutes from './routes/auth';
-import moduleRoutes from './routes/modules';
-import assignmentRoutes from './routes/assignments';
-import progressRoutes from './routes/progress';
-import alertRoutes from './routes/alerts';
-import dashboardRoutes from './routes/dashboards';
-import reportRoutes from './routes/reports';
+import authRoutes from './routes/auth.js';
+import moduleRoutes from './routes/modules.js';
+import assignmentRoutes from './routes/assignments.js';
+import progressRoutes from './routes/progress.js';
+import alertRoutes from './routes/alerts.js';
+import dashboardRoutes from './routes/dashboards.js';
+import reportRoutes from './routes/reports.js';
 
 dotenv.config();
 

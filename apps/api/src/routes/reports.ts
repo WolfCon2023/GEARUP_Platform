@@ -1,10 +1,10 @@
 import express, { type Router } from 'express';
 import type { ModuleProgressEntry } from '@northstar/shared';
-import { requireAuth, AuthRequest } from '../middleware/auth';
+import { requireAuth, AuthRequest } from '../middleware/auth.js';
 import { APRReportQuerySchema, DataCompletenessQuerySchema } from '@northstar/shared';
-import { Student } from '../models/Student';
-import { School } from '../models/School';
-import { Assignment } from '../models/Assignment';
+import { Student } from '../models/Student.js';
+import { School } from '../models/School.js';
+import { Assignment } from '../models/Assignment.js';
 
 const router: Router = express.Router();
 

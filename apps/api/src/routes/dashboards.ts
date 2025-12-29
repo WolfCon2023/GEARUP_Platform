@@ -1,12 +1,12 @@
 import express, { type Router } from 'express';
 import type { ModuleProgressEntry } from '@northstar/shared';
-import { requireAuth, AuthRequest } from '../middleware/auth';
-import { Student } from '../models/Student';
-import { School } from '../models/School';
-import { Assignment } from '../models/Assignment';
-import { Alert } from '../models/Alert';
-import { Module } from '../models/Module';
-import { DistrictDashboard } from '../models/DistrictDashboard';
+import { requireAuth, AuthRequest } from '../middleware/auth.js';
+import { Student } from '../models/Student.js';
+import { School } from '../models/School.js';
+import { Assignment } from '../models/Assignment.js';
+import { Alert } from '../models/Alert.js';
+import { Module } from '../models/Module.js';
+import { DistrictDashboard } from '../models/DistrictDashboard.js';
 
 const router: Router = express.Router();
 

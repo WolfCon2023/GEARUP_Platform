@@ -1,9 +1,9 @@
 import { Response, NextFunction } from 'express';
 import type { ParentContact } from '@northstar/shared';
-import { AuthRequest } from './auth';
-import { Student } from '../models/Student';
-import { Assignment } from '../models/Assignment';
-import { Alert } from '../models/Alert';
+import { AuthRequest } from './auth.js';
+import { Student } from '../models/Student.js';
+import { Assignment } from '../models/Assignment.js';
+import { Alert } from '../models/Alert.js';
 
 // Scope checks for data access
 export const scopeCheck = {

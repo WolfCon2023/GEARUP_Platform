@@ -1,8 +1,8 @@
 import express, { type Router } from 'express';
 import { AlertCreateSchema, AlertUpdateSchema, AlertQuerySchema } from '@northstar/shared';
-import { Alert } from '../models/Alert';
-import { requireAuth, requireRole, AuthRequest } from '../middleware/auth';
-import { scopeCheck } from '../middleware/scope';
+import { Alert } from '../models/Alert.js';
+import { requireAuth, requireRole, AuthRequest } from '../middleware/auth.js';
+import { scopeCheck } from '../middleware/scope.js';
 
 const router: Router = express.Router();
 

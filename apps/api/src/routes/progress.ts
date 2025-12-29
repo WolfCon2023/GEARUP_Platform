@@ -1,10 +1,10 @@
 import express, { type Router } from 'express';
 import type { ModuleProgressEntry, Question } from '@northstar/shared';
 import { ProgressUpdateSchema } from '@northstar/shared';
-import { Student } from '../models/Student';
-import { Module } from '../models/Module';
-import { requireAuth, AuthRequest } from '../middleware/auth';
-import { scopeCheck } from '../middleware/scope';
+import { Student } from '../models/Student.js';
+import { Module } from '../models/Module.js';
+import { requireAuth, AuthRequest } from '../middleware/auth.js';
+import { scopeCheck } from '../middleware/scope.js';
 
 const router: Router = express.Router();
 

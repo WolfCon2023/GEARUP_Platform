@@ -1,8 +1,8 @@
 import express, { type Router } from 'express';
 import bcrypt from 'bcryptjs';
 import { RegisterSchema, LoginSchema } from '@northstar/shared';
-import { User } from '../models/User';
-import { requireAuth, requireRole, generateToken, AuthRequest } from '../middleware/auth';
+import { User } from '../models/User.js';
+import { requireAuth, requireRole, generateToken, AuthRequest } from '../middleware/auth.js';
 
 const router: Router = express.Router();
 

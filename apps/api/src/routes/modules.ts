@@ -1,7 +1,7 @@
 import express, { type Router } from 'express';
 import { ModuleQuerySchema, ModuleCreateSchema, ModuleUpdateSchema } from '@northstar/shared';
-import { Module } from '../models/Module';
-import { requireAuth, requireRole, AuthRequest } from '../middleware/auth';
+import { Module } from '../models/Module.js';
+import { requireAuth, requireRole, AuthRequest } from '../middleware/auth.js';
 
 const router: Router = express.Router();
 

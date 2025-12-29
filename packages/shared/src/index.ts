@@ -1,8 +1,8 @@
 // Types
-export * from './types';
+export * from './types/index.js';
 
 // Zod Schemas
-export * from './schemas';
+export * from './schemas/index.js';
 
 
 
